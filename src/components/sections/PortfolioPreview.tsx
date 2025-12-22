@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronRight, ArrowUpRight } from "lucide-react";
 
-// Use Vite's glob import to load all images dynamically
+// Import portfolio images dynamically
 const imageModules = import.meta.glob("../../assets/Porfolio/*.jpg", {
   eager: true,
 }) as Record<string, { default: string }>;
 
-// Convert to array, sort by number, and take first 6
 const allImages = Object.entries(imageModules)
   .map(([path, module]) => ({
     path,
@@ -25,70 +24,204 @@ const PortfolioPreview: React.FC<PortfolioPreviewProps> = ({
   setActiveTab,
 }) => {
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+  const [isVisible, setIsVisible] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const handleImageLoad = (index: number) => {
-    setLoadedImages((prev) => ({ ...prev, [index]: true }));
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setIsVisible(true),
+      { threshold: 0.15 }
+    );
+    sectionRef.current && observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="py-12 sm:py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12">
-          <div className="mb-4 md:mb-0">
-            <span className="text-[#4F6F99] font-bold tracking-widest uppercase text-[10px] sm:text-xs mb-2 block">
+    <section
+      ref={sectionRef}
+      className="py-24 md:py-32 bg-premium-dark relative overflow-hidden"
+    >
+      {/* Premium ambient lighting effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#c7a76a]/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#c7a76a]/8 rounded-full blur-[100px]" />
+      </div>
+
+      {/* Decorative corner lines */}
+      <div className="absolute top-0 left-0 w-32 h-32 border-l border-t border-[#c7a76a]/15" />
+      <div className="absolute bottom-0 right-0 w-32 h-32 border-r border-b border-[#c7a76a]/15" />
+
+      {/* Floating gold particles */}
+      <div className="absolute top-20 right-20 w-1 h-1 bg-[#c7a76a]/40 rounded-full animate-pulse" />
+      <div className="absolute top-1/3 left-16 w-1.5 h-1.5 bg-[#c7a76a]/30 rounded-full animate-pulse delay-500" />
+      <div className="absolute bottom-32 right-1/3 w-1 h-1 bg-[#c7a76a]/50 rounded-full animate-pulse delay-1000" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div
+          className={`flex flex-col md:flex-row justify-between items-center mb-16 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <div className="text-center md:text-left">
+            <span className="inline-flex items-center gap-2 text-[#C7A76A] text-xs tracking-[0.3em] uppercase">
+              <span className="w-8 h-px bg-[#c7a76a]" />
               Our Portfolio
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-[#2C3852]">
-              Selected Works
+
+            <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-wide mt-4">
+              Selected
+              <span className="text-[#C7A76A] block md:inline">
+                &nbsp;Works
+              </span>
             </h2>
-            <p className="text-[#9FA6B2] mt-2 text-sm sm:text-base">
-              Showcasing our best projects and design achievements.
+
+            <p className="text-white/50 text-sm sm:text-base max-w-md mt-4 leading-relaxed">
+              A glimpse of our premium execution, luxury interiors, and elegant
+              detailing that define modern living.
             </p>
           </div>
+
+          {/* Desktop button with glow */}
           <button
             onClick={() => setActiveTab("gallery")}
-            className="hidden md:flex items-center text-[#C7A76A] font-bold text-sm hover:text-[#2C3852] transition-colors"
+            className="hidden md:flex items-center gap-2 px-8 py-4 border border-[#C7A76A]/40 text-[#C7A76A] 
+              hover:bg-[#C7A76A] hover:text-black hover:shadow-[0_0_30px_rgba(199,167,106,0.3)]
+              transition-all duration-500 font-medium tracking-wider uppercase text-sm mt-8 md:mt-0"
           >
-            View Full Portfolio <ChevronRight className="w-5 h-5 ml-1" />
+            View Full Portfolio
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-8 sm:mb-12">
+        {/* Premium Grid with varied sizes */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
           {allImages.map((src, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-lg shadow-md cursor-pointer aspect-[4/3]"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`group relative overflow-hidden cursor-pointer
+                ${
+                  index === 0 || index === 4
+                    ? "md:row-span-2 aspect-[3/4]"
+                    : "aspect-[4/3]"
+                }
+                transition-all duration-700 ease-out
+                ${
+                  isVisible
+                    ? `opacity-100 translate-y-0`
+                    : "opacity-0 translate-y-8"
+                }
+              `}
+              style={{
+                transitionDelay: `${index * 100}ms`,
+              }}
             >
-              {/* Loading placeholder */}
+              {/* Gold border frame */}
+              <div
+                className={`absolute inset-0 border transition-all duration-500 z-10 pointer-events-none
+                  ${
+                    hoveredIndex === index
+                      ? "border-[#c7a76a]/60"
+                      : "border-white/10"
+                  }`}
+              />
+
+              {/* Corner accents */}
+              <div
+                className={`absolute top-0 left-0 w-6 h-6 border-l-2 border-t-2 border-[#c7a76a] z-10
+                  transition-all duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
+              <div
+                className={`absolute bottom-0 right-0 w-6 h-6 border-r-2 border-b-2 border-[#c7a76a] z-10
+                  transition-all duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
+
+              {/* Skeleton loader */}
               {!loadedImages[index] && (
-                <div className="absolute inset-0 bg-[#F6F8FA] animate-pulse"></div>
+                <div className="absolute inset-0 bg-white/5 animate-pulse" />
               )}
+
+              {/* Image */}
               <img
                 src={src}
                 alt={`Portfolio ${index + 1}`}
-                loading="lazy"
-                onLoad={() => handleImageLoad(index)}
-                className={`w-full h-full object-cover transform transition duration-700 group-hover:scale-110 ${
-                  loadedImages[index] ? "opacity-100" : "opacity-0"
-                }`}
+                onLoad={() =>
+                  setLoadedImages((prev) => ({ ...prev, [index]: true }))
+                }
+                className={`w-full h-full object-cover transition-all duration-700
+                  ${
+                    hoveredIndex === index
+                      ? "scale-110 brightness-50"
+                      : "scale-100 brightness-100"
+                  }
+                  ${loadedImages[index] ? "opacity-100" : "opacity-0"}`}
               />
-              <div className="absolute inset-0 bg-[#2C3852]/70 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-center items-center text-center p-3 sm:p-6">
-                <div className="w-6 sm:w-8 h-0.5 bg-[#C7A76A] transform scale-x-0 group-hover:scale-x-100 transition duration-500 delay-150"></div>
+
+              {/* Premium hover overlay */}
+              <div
+                className={`absolute inset-0 flex flex-col justify-end p-6 transition-all duration-500
+                  ${hoveredIndex === index ? "opacity-100" : "opacity-0"}`}
+              >
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+                {/* Content */}
+                <div className="relative z-10">
+                  <span className="text-[#c7a76a] text-xs tracking-[0.2em] uppercase mb-2 block">
+                    Interior Design
+                  </span>
+                  <h4 className="text-white text-lg font-medium mb-3">
+                    Project {String(index + 1).padStart(2, "0")}
+                  </h4>
+                  <div className="flex items-center gap-2 text-white/80 text-sm group/btn">
+                    <span className="group-hover/btn:text-[#c7a76a] transition-colors">
+                      View Details
+                    </span>
+                    <ArrowUpRight className="w-4 h-4 group-hover/btn:text-[#c7a76a] transition-all group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </div>
+                </div>
               </div>
+
+              {/* Gold glow on hover */}
+              <div
+                className={`absolute inset-0 shadow-[inset_0_0_40px_rgba(199,167,106,0.15)] pointer-events-none
+                  transition-opacity duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
             </div>
           ))}
         </div>
 
-        <div className="text-center">
+        {/* Bottom section with stamp */}
+        <div
+          className={`flex flex-col md:flex-row items-center justify-between mt-16 pt-10 border-t border-white/5
+            transition-all duration-1000 delay-500 ${
+              isVisible ? "opacity-100" : "opacity-0"
+            }`}
+        >
+          <p className="text-white/40 text-sm tracking-wide text-center md:text-left mb-6 md:mb-0">
+            Crafting spaces that inspire, since 2024
+          </p>
+
+          {/* Mobile CTA */}
           <button
             onClick={() => setActiveTab("gallery")}
-            className="btn-primary px-6 sm:px-10 py-2.5 sm:py-3 text-xs sm:text-sm uppercase tracking-widest shadow-lg inline-flex items-center"
+            className="md:hidden px-8 py-4 bg-[#C7A76A] text-black uppercase font-semibold tracking-wider text-sm
+              hover:bg-white transition-all duration-500 shadow-[0_0_30px_rgba(199,167,106,0.2)]"
           >
             View Full Portfolio
           </button>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

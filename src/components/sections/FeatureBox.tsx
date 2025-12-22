@@ -7,49 +7,75 @@ const FeatureBox: React.FC = () => {
   };
 
   return (
-    <div className="py-12 sm:py-16 md:py-20 bg-[#F6F8FA]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl bg-gradient-to-br from-[#2C3852] to-[#3B4A69] p-5 sm:p-8 md:p-12 lg:p-16 shadow-2xl relative overflow-hidden">
-          {/* Abstract bg element */}
-          <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-[#4F6F99] opacity-20 rounded-full blur-3xl -mr-8 sm:-mr-16 -mt-8 sm:-mt-16"></div>
+    <div className="py-16 md:py-24 overflow-hidden relative z-[2]">
+      {/* Light overlay for continuity */}
+      <div className="absolute inset-0 bg-white/60 z-0" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 md:gap-12 items-center relative z-10">
-            <div className="text-white text-center lg:text-left">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold mb-4 sm:mb-6 leading-tight">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="relative rounded-3xl p-10 shadow-2xl overflow-hidden group bg-gradient-to-br from-[#2B354A]/95 to-[#44526D]/95">
+          {/* Gradient Overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2B354A]/80 to-[#44526D]/80 mix-blend-multiply"></div>
+
+          {/* Floating Decorative Blobs */}
+          <div className="absolute -top-10 -right-10 w-60 h-60 bg-[#4F6F99]/25 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#2C3852]/30 rounded-full blur-[90px] animate-pulse-slow"></div>
+
+          {/* CONTENT */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-10 items-center text-white">
+            {/* LEFT */}
+            <div className="space-y-6 transform transition-all duration-700 group-hover:translate-x-2">
+              <h2 className="text-3xl md:text-4xl font-heading font-bold">
                 Transforming Visions into{" "}
                 <span className="text-[#C7A76A]">Reality</span>
               </h2>
-              <p className="text-[#D9E1EC] mb-6 sm:mb-8 leading-relaxed text-sm sm:text-base">
-                Our integrated approach ensures that every aspect of your
-                interior project is handled with professional care, from the
-                initial sketch to the final polish.
+
+              <p className="text-[#D9E1EC] leading-relaxed">
+                Using world-class craftsmanship & turnkey execution, we bring
+                your dream interiors to life with precision.
               </p>
+
               <button
                 onClick={handleEmailClick}
-                className="bg-[#C7A76A] text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-md font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-white hover:text-[#2C3852] transition-all duration-300 flex items-center gap-2 mx-auto lg:mx-0"
+                className="
+                  relative bg-[#C7A76A] text-white px-8 py-3 rounded-md 
+                  font-semibold text-sm uppercase tracking-wider 
+                  transition-all duration-500 hover:scale-[1.04] hover:shadow-xl
+                "
               >
-                <Mail className="w-4 h-4" />
-                Email Us Now
+                <span className="flex items-center gap-2 justify-center">
+                  <Mail className="w-5 h-5" />
+                  Email Us Now
+                </span>
               </button>
             </div>
 
-            {/* Inner White Box */}
-            <div className="bg-white rounded-xl p-5 sm:p-6 md:p-8 shadow-lg">
-              <h3 className="text-base sm:text-lg md:text-xl font-heading font-bold text-[#2C3852] mb-4 sm:mb-6 border-b border-[#F6F8FA] pb-3 sm:pb-4">
+            {/* RIGHT BOX */}
+            <div
+              className="
+                bg-white rounded-xl p-8 shadow-xl 
+                text-[#2C3852]
+                transition-transform duration-700
+                hover:-translate-y-2 hover:scale-[1.02]
+              "
+            >
+              <h3 className="text-xl font-bold mb-6 border-b pb-4">
                 The Dharma Advantage
               </h3>
-              <ul className="space-y-3 sm:space-y-4">
+
+              <ul className="space-y-4">
                 {[
                   "Complete Turnkey Execution",
                   "3D Visualization & Planning",
                   "Custom Furniture Fabrication",
                   "Post-Handover Support",
                 ].map((point, i) => (
-                  <li key={i} className="flex items-center">
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#C7A76A] mr-2 sm:mr-3 flex-shrink-0" />
-                    <span className="text-[#3B4A69] font-medium text-sm sm:text-base">
-                      {point}
-                    </span>
+                  <li
+                    key={i}
+                    className="flex items-center opacity-0 translate-y-3 animate-fade-slide"
+                    style={{ animationDelay: `${i * 200}ms` }}
+                  >
+                    <CheckCircle className="w-5 h-5 text-[#C7A76A] mr-3" />
+                    <span>{point}</span>
                   </li>
                 ))}
               </ul>
@@ -57,6 +83,22 @@ const FeatureBox: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom Animation */}
+      <style>
+        {`
+          @keyframes fade-slide {
+            0% {opacity: 0; transform: translateY(10px);}
+            100% {opacity: 1; transform: translateY(0);}
+          }
+          .animate-fade-slide {
+            animation: fade-slide .7s ease forwards;
+          }
+          .animate-pulse-slow {
+            animation: pulse 5s ease-in-out infinite;
+          }
+        `}
+      </style>
     </div>
   );
 };

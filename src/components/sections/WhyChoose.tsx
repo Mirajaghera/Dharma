@@ -1,57 +1,212 @@
-import React from "react";
-import { Award, Shield, Clock } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
-const WhyChoose: React.FC = () => {
-  const items = [
-    {
-      title: "Design Excellence",
-      icon: Award,
-      desc: "Award-winning conceptualization that blends aesthetics with functionality.",
-    },
-    {
-      title: "Quality Assurance",
-      icon: Shield,
-      desc: "Strict quality control protocols using only premium grade materials.",
-    },
-    {
-      title: "Timely Delivery",
-      icon: Clock,
-      desc: "Committed to meeting project milestones without compromising on detail.",
-    },
-  ];
+// Service data with images
+const services = [
+  {
+    title: "Interior Design",
+    shortDesc: "Transform spaces with elegant, functional design solutions.",
+    image:
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    title: "Modular Kitchen",
+    shortDesc: "Smart, ergonomic kitchens with premium finishes.",
+    image:
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    title: "Wooden Furniture",
+    shortDesc: "Handcrafted pieces that add warmth and character.",
+    image:
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    title: "False Ceiling",
+    shortDesc: "Stunning ceiling designs with integrated lighting.",
+    image:
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    title: "PVC Furniture",
+    shortDesc: "Water-resistant, durable modern furniture solutions.",
+    image:
+      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    title: "Turnkey Projects",
+    shortDesc: "Complete end-to-end project management.",
+    image:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=800&auto=format&fit=crop",
+  },
+];
+
+const Services: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setIsVisible(true),
+      { threshold: 0.1 }
+    );
+    sectionRef.current && observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="py-12 sm:py-16 md:py-24 bg-[#F6F8FA]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-[#2C3852] mb-3 sm:mb-4">
-            Why Choose Dharma
+    <section
+      ref={sectionRef}
+      className="relative py-24 md:py-32 bg-premium-dark overflow-hidden"
+    >
+      {/* Ambient lighting */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/3 w-[500px] h-[500px] bg-[#c7a76a]/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#c7a76a]/8 rounded-full blur-[120px]" />
+      </div>
+
+      {/* Decorative corners */}
+      <div className="absolute top-0 left-0 w-40 h-40 border-l border-t border-[#c7a76a]/15" />
+      <div className="absolute bottom-0 right-0 w-40 h-40 border-r border-b border-[#c7a76a]/15" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div
+          className={`text-center mb-16 md:mb-20 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <span className="inline-flex items-center gap-3 text-[#c7a76a] text-xs tracking-[0.3em] uppercase mb-4">
+            <span className="w-8 h-px bg-[#c7a76a]" />
+            What We Offer
+            <span className="w-8 h-px bg-[#c7a76a]" />
+          </span>
+
+          <h2 className="text-white text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-wide mt-4">
+            Our <span className="text-[#c7a76a]">Services</span>
           </h2>
-          <div className="w-16 sm:w-20 h-1 bg-[#C7A76A] mx-auto mb-4 sm:mb-6"></div>
-          <p className="text-[#3B4A69] max-w-2xl mx-auto text-sm sm:text-base md:text-lg px-4 sm:px-0">
-            We deliver exceptional quality, design excellence, and
-            client-focused solutions that stand the test of time.
+
+          <p className="text-white/50 max-w-2xl mx-auto mt-6 text-sm md:text-base leading-relaxed">
+            Comprehensive interior solutions tailored to transform your vision
+            into stunning reality.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {items.map((item, idx) => (
-            <div key={idx} className="feature-card p-5 sm:p-6 md:p-8 group">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-[#F6F8FA] rounded-full flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-[#2C3852] transition-colors duration-300">
-                <item.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#C7A76A]" />
+        {/* Services Grid - Bento Style */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className={`group relative overflow-hidden cursor-pointer
+                ${index === 0 ? "lg:col-span-2 lg:row-span-2" : ""}
+                ${
+                  index === 0
+                    ? "aspect-[16/10] lg:aspect-auto lg:h-full"
+                    : "aspect-[4/3]"
+                }
+                transition-all duration-700
+                ${
+                  isVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+                }
+              `}
+              style={{ transitionDelay: `${index * 80}ms` }}
+            >
+              {/* Image */}
+              <img
+                src={service.image}
+                alt={service.title}
+                className={`w-full h-full object-cover transition-all duration-700
+                  ${
+                    hoveredIndex === index
+                      ? "scale-110 brightness-[0.3]"
+                      : "scale-100 brightness-[0.6]"
+                  }`}
+              />
+
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+              {/* Border frame */}
+              <div
+                className={`absolute inset-3 border transition-all duration-500 pointer-events-none
+                  ${
+                    hoveredIndex === index
+                      ? "border-[#c7a76a]/50"
+                      : "border-white/10"
+                  }`}
+              />
+
+              {/* Corner accents */}
+              <div
+                className={`absolute top-3 left-3 w-4 h-4 border-l-2 border-t-2 border-[#c7a76a]
+                  transition-all duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
+              <div
+                className={`absolute bottom-3 right-3 w-4 h-4 border-r-2 border-b-2 border-[#c7a76a]
+                  transition-all duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
+
+              {/* Content */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
+                {/* Service number - Bold White */}
+                <span
+                  className={`absolute top-6 right-6 text-6xl md:text-7xl font-bold text-white/80 transition-all duration-500
+                    ${hoveredIndex === index ? "text-[#c7a76a]" : ""}`}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                {/* Title */}
+                <h3
+                  className={`text-white text-xl md:text-2xl font-semibold tracking-wide mb-2
+                    transition-all duration-500 ${
+                      hoveredIndex === index ? "text-[#c7a76a]" : ""
+                    }`}
+                >
+                  {service.title}
+                </h3>
+
+                {/* Description */}
+                <p
+                  className={`text-white/60 text-sm leading-relaxed max-w-sm transition-all duration-500
+                    ${hoveredIndex === index ? "text-white/80" : ""}`}
+                >
+                  {service.shortDesc}
+                </p>
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl font-heading font-bold text-[#2C3852] mb-2 sm:mb-3">
-                {item.title}
-              </h3>
-              <p className="text-[#9FA6B2] leading-relaxed text-xs sm:text-sm">
-                {item.desc}
-              </p>
+
+              {/* Gold glow on hover */}
+              <div
+                className={`absolute inset-0 shadow-[inset_0_0_60px_rgba(199,167,106,0.1)] pointer-events-none
+                  transition-opacity duration-500 ${
+                    hoveredIndex === index ? "opacity-100" : "opacity-0"
+                  }`}
+              />
             </div>
           ))}
         </div>
+
+        {/* Bottom tagline */}
+        <div
+          className={`text-center mt-16 transition-all duration-1000 delay-500 ${
+            isVisible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="text-[#c7a76a]/40 tracking-[0.3em] text-xs uppercase">
+            Excellence in Every Detail
+          </span>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default WhyChoose;
+export default Services;

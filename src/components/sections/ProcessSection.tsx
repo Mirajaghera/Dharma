@@ -1,84 +1,117 @@
-import React from "react";
-import { Users, Lightbulb, PenTool, Hammer, CheckCircle } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 const ProcessSection: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
   const steps = [
     {
-      step: "01",
-      title: "Consultation",
-      desc: "We begin by understanding your vision, needs, and space requirements.",
-      icon: Users,
+      number: "01",
+      title: "Initial Consultation",
+      desc: "We begin by understanding your vision, goals, and needs, followed by a detailed analysis.",
+      image:
+        "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=600&auto=format&fit=crop",
     },
     {
-      step: "02",
-      title: "Concept",
-      desc: "Our designers create tailored concepts, mood boards, and layouts.",
-      icon: Lightbulb,
+      number: "02",
+      title: "Design & Planning",
+      desc: "Our team creates detailed designs that reflect your requirements.",
+      image:
+        "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=600&auto=format&fit=crop",
     },
     {
-      step: "03",
-      title: "Design",
-      desc: "Refining every detail from material selection to 3D visualization.",
-      icon: PenTool,
+      number: "03",
+      title: "Implementation",
+      desc: "With carefully selected contractors, we manage every phase.",
+      image:
+        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=600&auto=format&fit=crop",
     },
     {
-      step: "04",
-      title: "Execution",
-      desc: "Collaborating with trusted vendors under strict quality standards.",
-      icon: Hammer,
-    },
-    {
-      step: "05",
-      title: "Delivery",
-      desc: "Presenting the completed project with post-project guidance.",
-      icon: CheckCircle,
+      number: "04",
+      title: "Project Handover",
+      desc: "Upon completion, we conduct a thorough review, ensuring perfection and satisfaction.",
+      image:
+        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=600&auto=format&fit=crop",
     },
   ];
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setIsVisible(true),
+      { threshold: 0.2 }
+    );
+
+    sectionRef.current && observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="py-12 sm:py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10 sm:mb-16 md:mb-20">
-          <span className="text-[#4F6F99] font-bold tracking-widest uppercase text-[10px] sm:text-xs mb-2 block">
+    <section
+      ref={sectionRef}
+      className="relative py-20 lg:py-28 overflow-hidden z-[2]"
+    >
+      {/* Light overlay for readability */}
+      <div className="absolute inset-0 bg-white/70 z-0" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10">
+        {/* Header */}
+        <div
+          className={`text-center max-w-3xl mx-auto transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
+          <span className="uppercase tracking-[0.25em] text-[#1a1a1a] text-xs font-semibold">
             How We Work
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-heading font-bold text-[#2C3852] mb-3 sm:mb-4">
-            Our Premium Process
+
+          <h2 className="mt-3 text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1a1a1a] leading-tight">
+            Our <span className="text-[#c7a76a]">Premium</span> Interior Process
           </h2>
-          <div className="w-16 sm:w-20 h-1 bg-[#C7A76A] mx-auto mb-4 sm:mb-6"></div>
-          <p className="text-[#3B4A69] max-w-2xl mx-auto text-sm sm:text-base md:text-lg px-4 sm:px-0">
-            A refined, step-by-step approach to delivering excellence in every
-            project.
+
+          <p className="mt-4 text-[#555] text-base">
+            A streamlined, transparent, and client-centric journey to create
+            exceptional living spaces.
           </p>
         </div>
 
-        <div className="relative">
-          {/* Connector Line (Desktop only) */}
-          <div className="hidden lg:block absolute top-[2.5rem] left-[10%] right-[10%] h-0.5 bg-[#D9E1EC] z-0"></div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 relative z-10">
-            {steps.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col items-center text-center group"
-              >
-                <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-white rounded-full border-4 border-[#F6F8FA] flex items-center justify-center mb-3 sm:mb-4 md:mb-6 shadow-sm group-hover:border-[#C7A76A] group-hover:shadow-lg transition-all duration-300 relative z-10">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-[#2C3852] rounded-full flex items-center justify-center text-white group-hover:bg-[#C7A76A] transition-colors">
-                    <item.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </div>
-                </div>
-                <h3 className="text-sm sm:text-base md:text-lg font-heading font-bold text-[#2C3852] mb-1 sm:mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-[#9FA6B2] text-xs sm:text-sm leading-relaxed max-w-[150px] sm:max-w-[200px] mx-auto">
-                  {item.desc}
-                </p>
+        {/* Cards */}
+        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all transform hover:-translate-y-2 duration-500 ${
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              } delay-${index * 100}`}
+            >
+              <div className="h-44 overflow-hidden">
+                <img
+                  src={step.image}
+                  alt={step.title}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </div>
-            ))}
-          </div>
+
+              <div className="p-6 relative">
+                <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2">
+                  <span className="text-[#c7a76a]">{step.number}.</span>{" "}
+                  {step.title}
+                </h3>
+
+                <p className="text-[#666] text-sm leading-relaxed">
+                  {step.desc}
+                </p>
+
+                <span className="absolute bottom-3 right-4 text-6xl font-extrabold text-[#c7a76a]/10">
+                  {step.number}
+                </span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

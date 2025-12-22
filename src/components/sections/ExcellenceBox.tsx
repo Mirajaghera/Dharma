@@ -1,66 +1,144 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Layers, Users, CheckCircle, PenTool } from "lucide-react";
 
 const ExcellenceBox: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
   const items = [
     {
       title: "Premium Materials",
-      desc: "Top-grade materials ensuring exceptional durability.",
+      desc: "Top-grade materials ensuring exceptional durability and timeless elegance.",
       icon: Layers,
+      number: "01",
     },
     {
       title: "Skilled Designers",
-      desc: "Expert creativity combined with functional precision.",
+      desc: "Expert creativity combined with functional precision and innovation.",
       icon: Users,
+      number: "02",
     },
     {
       title: "Transparent Process",
-      desc: "Clear timelines, honest communication, no hidden costs.",
+      desc: "Clear timelines, honest communication, and no hidden costs.",
       icon: CheckCircle,
+      number: "03",
     },
     {
       title: "Personalized Approach",
-      desc: "Tailored designs to match your unique style and space.",
+      desc: "Tailored designs to match your unique style and space requirements.",
       icon: PenTool,
+      number: "04",
     },
   ];
 
-  return (
-    <div className="py-12 sm:py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Gradient Container */}
-        <div className="rounded-2xl sm:rounded-3xl bg-gradient-to-br from-[#2C3852] to-[#3B4A69] p-5 sm:p-8 md:p-12 shadow-2xl relative overflow-hidden">
-          {/* Decorative */}
-          <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-[#C7A76A] opacity-10 rounded-full blur-3xl -mr-8 sm:-mr-16 -mt-8 sm:-mt-16"></div>
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setIsVisible(true),
+      { threshold: 0.15 }
+    );
+    sectionRef.current && observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
 
-          <div className="relative z-10 text-center mb-6 sm:mb-8 md:mb-12">
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-heading font-bold text-white mb-3 sm:mb-4 px-2">
-              Experience Excellence With Every Detail
+  return (
+    <section
+      ref={sectionRef}
+      className="relative py-24 md:py-32 overflow-hidden z-[2]"
+    >
+      {/* Light overlay */}
+      <div className="absolute inset-0 bg-white/70 z-0" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Two Column Layout */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left - Header Content */}
+          <div
+            className={`transition-all duration-1000 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-8"
+            }`}
+          >
+            <span className="inline-flex items-center gap-3 text-[#c7a76a] text-xs tracking-[0.3em] uppercase mb-4">
+              <span className="w-8 h-px bg-[#c7a76a]" />
+              Why Choose Us
+            </span>
+
+            <h2 className="text-[#1a1a1a] text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-wide mt-4 leading-tight">
+              Experience
+              <span className="block text-[#c7a76a]">Excellence</span>
+              In Every Detail
             </h2>
-            <div className="w-16 sm:w-24 h-1 bg-[#C7A76A] mx-auto rounded-full"></div>
+
+            <p className="text-[#666] mt-6 text-sm md:text-base leading-relaxed max-w-md">
+              We combine world-class craftsmanship with personalized attention
+              to transform your spaces into stunning works of art.
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 relative z-10">
-            {items.map((item, idx) => (
+          {/* Right - Feature Grid */}
+          <div className="grid grid-cols-2 gap-5">
+            {items.map((item, index) => (
               <div
-                key={idx}
-                className="bg-white/10 backdrop-blur-md border border-white/10 p-4 sm:p-5 md:p-6 rounded-xl hover:bg-white hover:transform hover:-translate-y-1 transition-all duration-300 group text-left"
+                key={index}
+                className={`group relative bg-white rounded-xl p-6 shadow-lg border border-[#e8e8e8]
+                  hover:shadow-2xl hover:border-[#c7a76a]/30 hover:-translate-y-2
+                  transition-all duration-500
+                  ${
+                    isVisible
+                      ? "opacity-100 translate-y-0"
+                      : "opacity-0 translate-y-8"
+                  }
+                `}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-[#C7A76A] rounded-lg flex items-center justify-center mb-3 sm:mb-4 text-white group-hover:scale-110 transition-transform">
-                  <item.icon className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
+                {/* Number */}
+                <span className="absolute top-4 right-4 text-4xl font-bold text-[#f0f0f0] group-hover:text-[#c7a76a]/20 transition-colors duration-500">
+                  {item.number}
+                </span>
+
+                {/* Icon */}
+                <div
+                  className="w-14 h-14 rounded-lg bg-gradient-to-br from-[#c7a76a] to-[#a08050] 
+                    flex items-center justify-center mb-5 
+                    group-hover:scale-110 transition-transform duration-500"
+                >
+                  <item.icon className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-sm sm:text-base md:text-xl font-heading font-bold text-white group-hover:text-[#2C3852] mb-1 sm:mb-2 transition-colors">
+
+                {/* Title */}
+                <h3 className="text-[#1a1a1a] font-semibold text-base mb-2 group-hover:text-[#c7a76a] transition-colors duration-500">
                   {item.title}
                 </h3>
-                <p className="text-[#D9E1EC] text-[10px] sm:text-xs md:text-sm leading-relaxed group-hover:text-[#3B4A69] transition-colors">
+
+                {/* Description */}
+                <p className="text-[#888] text-xs leading-relaxed">
                   {item.desc}
                 </p>
+
+                {/* Gold line on hover */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#c7a76a] to-transparent
+                    transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+                />
               </div>
             ))}
           </div>
         </div>
+
+        {/* Bottom tagline */}
+        <div
+          className={`text-center mt-20 transition-all duration-1000 delay-500 ${
+            isVisible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <span className="text-[#c7a76a]/50 tracking-[0.3em] text-xs uppercase">
+            Trusted by 75+ Happy Clients
+          </span>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
