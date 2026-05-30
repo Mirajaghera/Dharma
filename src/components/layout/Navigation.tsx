@@ -43,8 +43,8 @@ const Navigation: React.FC<NavigationProps> = ({
     window.open("https://wa.me/918490924225", "_blank");
   };
 
-  // Determine if navbar should be transparent (only on home and at top)
-  const isTransparent = activeTab === "home" && !isScrolled;
+  // Determine if navbar should be transparent (at the top of any screen)
+  const isTransparent = !isScrolled;
 
   return (
     <nav

@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
+import image1 from "../../assets/herosession1.webp";
+import image2 from "../../assets/herosession2.webp";
+import image3 from "../../assets/herosession3.webp";
 
 interface HeroSliderProps {
   setActiveTab: (tab: string) => void;
@@ -6,22 +9,19 @@ interface HeroSliderProps {
 
 const heroSlides = [
   {
-    image:
-      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2000&auto=format&fit=crop",
+    image: image1,
     headline1: "Transforming Spaces",
     headline2: "Into Masterpieces",
     tagline: "Luxury Living Redefined",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2000&auto=format&fit=crop",
+    image: image2,
     headline1: "Where Elegance",
     headline2: "Meets Innovation",
     tagline: "Modern Interior Excellence",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop",
+    image: image3,
     headline1: "Crafting Dreams",
     headline2: "With Timeless Design",
     tagline: "Premium Design Studio",
@@ -78,10 +78,9 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ setActiveTab }) => {
         <div
           key={index}
           className={`absolute inset-0 transition-all duration-[1400ms] ease-out
-            ${
-              index === currentIndex
-                ? "opacity-100 scale-110 blur-0 brightness-110 contrast-105 saturate-125"
-                : "opacity-0 scale-125 blur-sm brightness-75 contrast-90 saturate-75"
+            ${index === currentIndex
+              ? "opacity-100 scale-110 blur-0 brightness-110 contrast-105 saturate-125"
+              : "opacity-0 scale-125 blur-sm brightness-75 contrast-90 saturate-75"
             }`}
         >
           <img
@@ -151,11 +150,10 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ setActiveTab }) => {
           <button
             key={idx}
             onClick={() => changeSlide(idx)}
-            className={`transition-all ${
-              idx === currentIndex
+            className={`transition-all ${idx === currentIndex
                 ? "w-1 h-9 bg-[#c7a76a]"
                 : "w-1 h-4 bg-white/30 hover:bg-white/60"
-            }`}
+              }`}
           />
         ))}
       </div>
